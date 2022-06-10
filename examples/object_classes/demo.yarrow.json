@@ -1,0 +1,53 @@
+{
+    "info": {
+        "version": "1.0-08.04.2022",
+        "source": "example",
+        "date_created": "2022-04-29 18:02:14.617078"
+    },
+    "images": [
+        {
+            "id": "3c3f2c12e4cc4625a19f4876dab39f79",
+            "width": 300,
+            "height": 200,
+            "file_name": "path/to/image.jpeg",
+            "date_captured": "2022-04-29 18:02:14.617078",
+            "azure_url": "http://<online_storage>/path/to/image.jpeg"
+        }
+    ],
+    "annotations": [
+        {
+            "id": "3eb03b9743d54b78b55dffa94568987e",
+            "image_id": [
+                "3c3f2c12e4cc4625a19f4876dab39f79"
+            ],
+            "category_id": [
+                "58985e80862248f2b2fffb42fde549b6"
+            ],
+            "contributor_id": "6230b898bafd4244898e1e1724b476f6",
+            "name": "bump",
+            "is_crowd": 0,
+            "bbox": [
+                50.0,
+                50.0,
+                75.0,
+                75.0
+            ],
+            "date_captured": "2022-04-29 18:02:14.617078"
+        }
+    ],
+    "contributors": [
+        {
+            "id": "6230b898bafd4244898e1e1724b476f6",
+            "human": true,
+            "name": "labeler"
+        }
+    ],
+    "categories": [
+        {
+            "id": "58985e80862248f2b2fffb42fde549b6",
+            "name": "CQ",
+            "super_category": "CQ",
+            "value": "15.1"
+        }
+    ]
+}

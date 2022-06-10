@@ -1,0 +1,481 @@
+{
+    "title": "YarrowDataset_pydantic",
+    "type": "object",
+    "properties": {
+        "info": {
+            "$ref": "#/definitions/Info"
+        },
+        "images": {
+            "title": "Images",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Image_pydantic"
+            }
+        },
+        "annotations": {
+            "title": "Annotations",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Annotation_pydantic"
+            }
+        },
+        "confidential": {
+            "title": "Confidential",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Clearance"
+            }
+        },
+        "contributors": {
+            "title": "Contributors",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Contributor"
+            }
+        },
+        "categories": {
+            "title": "Categories",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Category"
+            }
+        },
+        "multilayer_images": {
+            "title": "Multilayer Images",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/MultilayerImage_pydantic"
+            }
+        }
+    },
+    "required": [
+        "info",
+        "images"
+    ],
+    "definitions": {
+        "Info": {
+            "title": "Info",
+            "type": "object",
+            "properties": {
+                "version": {
+                    "title": "Version",
+                    "default": "1.0-12.05.2022",
+                    "type": "string"
+                },
+                "source": {
+                    "title": "Source",
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "object"
+                        }
+                    ]
+                },
+                "date_created": {
+                    "title": "Date Created",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "destination": {
+                    "title": "Destination",
+                    "type": "object"
+                }
+            },
+            "required": [
+                "source",
+                "date_created"
+            ]
+        },
+        "Layer": {
+            "title": "Layer",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "type": "string"
+                },
+                "frame_id": {
+                    "title": "Frame Id",
+                    "type": "integer"
+                },
+                "width": {
+                    "title": "Width",
+                    "type": "integer"
+                },
+                "height": {
+                    "title": "Height",
+                    "type": "integer"
+                },
+                "name": {
+                    "title": "Name",
+                    "default": "",
+                    "type": "string"
+                },
+                "meta": {
+                    "title": "Meta",
+                    "type": "object"
+                }
+            },
+            "required": [
+                "frame_id"
+            ]
+        },
+        "Image_pydantic": {
+            "title": "Image_pydantic",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "type": "string"
+                },
+                "width": {
+                    "title": "Width",
+                    "type": "integer"
+                },
+                "height": {
+                    "title": "Height",
+                    "type": "integer"
+                },
+                "file_name": {
+                    "title": "File Name",
+                    "type": "string"
+                },
+                "date_captured": {
+                    "title": "Date Captured",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "azure_url": {
+                    "title": "Azure Url",
+                    "type": "string"
+                },
+                "confidential_id": {
+                    "title": "Confidential Id",
+                    "type": "string"
+                },
+                "meta": {
+                    "title": "Meta",
+                    "anyOf": [
+                        {
+                            "type": "object"
+                        },
+                        {
+                            "type": "string",
+                            "format": "json-string"
+                        }
+                    ]
+                },
+                "comment": {
+                    "title": "Comment",
+                    "type": "string"
+                },
+                "asset_id": {
+                    "title": "Asset Id",
+                    "type": "string"
+                },
+                "layers": {
+                    "title": "Layers",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Layer"
+                    }
+                }
+            },
+            "required": [
+                "width",
+                "height",
+                "file_name",
+                "date_captured"
+            ]
+        },
+        "RLE": {
+            "title": "RLE",
+            "description": "Uncompressed binary Mask\n\nArgs:\n    counts  : List[int]\n    size    : List[int]\n\nCan take \"binary_mask\" of type ndarray as an input, will have the normal attributes",
+            "type": "object",
+            "properties": {
+                "counts": {
+                    "title": "Counts",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "size": {
+                    "title": "Size",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "required": [
+                "counts",
+                "size"
+            ]
+        },
+        "Annotation_pydantic": {
+            "title": "Annotation_pydantic",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "type": "string"
+                },
+                "image_id": {
+                    "title": "Image Id",
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    ]
+                },
+                "category_id": {
+                    "title": "Category Id",
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    ]
+                },
+                "contributor_id": {
+                    "title": "Contributor Id",
+                    "type": "string"
+                },
+                "name": {
+                    "title": "Name",
+                    "type": "string"
+                },
+                "comment": {
+                    "title": "Comment",
+                    "type": "string"
+                },
+                "segmentation": {
+                    "title": "Segmentation",
+                    "deprecated": true,
+                    "anyOf": [
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        {
+                            "$ref": "#/definitions/RLE"
+                        }
+                    ]
+                },
+                "is_crowd": {
+                    "title": "Is Crowd",
+                    "default": 0,
+                    "deprecated": true,
+                    "type": "integer"
+                },
+                "mask": {
+                    "$ref": "#/definitions/RLE"
+                },
+                "polygon": {
+                    "title": "Polygon",
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "area": {
+                    "title": "Area",
+                    "type": "number"
+                },
+                "bbox": {
+                    "title": "Bbox",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "keypoints": {
+                    "title": "Keypoints",
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "num_keypoints": {
+                    "title": "Num Keypoints",
+                    "type": "integer"
+                },
+                "weight": {
+                    "title": "Weight",
+                    "type": "number"
+                },
+                "date_captured": {
+                    "title": "Date Captured",
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "image_id",
+                "category_id",
+                "contributor_id"
+            ]
+        },
+        "Clearance": {
+            "title": "Clearance",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "type": "string"
+                },
+                "level": {
+                    "title": "Level",
+                    "type": "integer"
+                },
+                "perimeter": {
+                    "title": "Perimeter",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "level",
+                "perimeter"
+            ]
+        },
+        "Contributor": {
+            "title": "Contributor",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "type": "string"
+                },
+                "human": {
+                    "title": "Human",
+                    "type": "boolean"
+                },
+                "name": {
+                    "title": "Name",
+                    "type": "string"
+                },
+                "model_id": {
+                    "title": "Model Id",
+                    "type": "string"
+                },
+                "human_id": {
+                    "title": "Human Id",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "human",
+                "name"
+            ]
+        },
+        "Edge": {
+            "title": "Edge",
+            "type": "object",
+            "properties": {
+                "start_idx": {
+                    "title": "Start Idx",
+                    "type": "integer"
+                },
+                "end_idx": {
+                    "title": "End Idx",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "start_idx",
+                "end_idx"
+            ]
+        },
+        "Category": {
+            "title": "Category",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "type": "string"
+                },
+                "name": {
+                    "title": "Name",
+                    "type": "string"
+                },
+                "value": {
+                    "title": "Value",
+                    "type": "string"
+                },
+                "super_category": {
+                    "title": "Super Category",
+                    "type": "string"
+                },
+                "keypoints": {
+                    "title": "Keypoints",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "skeleton": {
+                    "title": "Skeleton",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Edge"
+                    }
+                }
+            },
+            "required": [
+                "name"
+            ]
+        },
+        "MultilayerImage_pydantic": {
+            "title": "MultilayerImage_pydantic",
+            "description": "Multilayer or spectral image representation\n\nBe careful the hash and equality are well defined only inside a single\nYarrowDataset",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "type": "string"
+                },
+                "image_id": {
+                    "title": "Image Id",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "title": "Name",
+                    "default": "",
+                    "type": "string"
+                },
+                "meta": {
+                    "title": "Meta",
+                    "type": "object"
+                }
+            }
+        }
+    }
+}

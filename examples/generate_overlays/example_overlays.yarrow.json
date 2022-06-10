@@ -1,0 +1,56 @@
+{
+    "info": {
+        "source": "Demo",
+        "date_created": "2021-10-27 10:18:30.289072"
+    },
+    "images": [
+        {
+            "id": "0ff9da03f9ab4eeba8cc90208408013e",
+            "width": 1000,
+            "height": 1000,
+            "file_name": "test_image_0.jpg",
+            "date_captured": "2021-10-27 10:18:30.289072",
+            "azure_url": "https://picsum.photos/200/300",
+            "meta": {
+                "light": 0,
+                "CAB": "056bd6fd7f8c4bf18d99f09e2ec46d71"
+            }
+        },
+        {
+            "id": "0ff9da03f9ab4eeba8cc90208408013e",
+            "width": 1000,
+            "height": 1000,
+            "file_name": "test_image_1.jpg",
+            "date_captured": "2021-10-27 10:18:30.289072",
+            "azure_url": "https://picsum.photos/200/300",
+            "meta": {
+                "light": 1,
+                "CAB": "fd66bca006bf46248197340d680169a7"
+            }
+        },
+        {
+            "id": "0ff9da03f9ab4eeba8cc90208408013e",
+            "width": 1000,
+            "height": 1000,
+            "file_name": "test_image_2.jpg",
+            "date_captured": "2021-10-27 10:18:30.289072",
+            "azure_url": "https://picsum.photos/200/300",
+            "meta": {
+                "light": 2,
+                "CAB": "58999b1a48f440a89106a9e661f78435"
+            }
+        },
+        {
+            "id": "0ff9da03f9ab4eeba8cc90208408013e",
+            "width": 1000,
+            "height": 1000,
+            "file_name": "test_image_3.jpg",
+            "date_captured": "2021-10-27 10:18:30.289072",
+            "azure_url": "https://picsum.photos/200/300",
+            "meta": {
+                "light": 3,
+                "CAB": "b864922d33314e24b9d1161eaba5cc97"
+            }
+        }
+    ]
+}

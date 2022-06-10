@@ -1,0 +1,68 @@
+{
+    "info": {
+        "version": "1.0-08.04.2022",
+        "source": "Demo",
+        "date_created": "2022-05-11 11:51:37.366148"
+    },
+    "images": [
+        {
+            "id": "ca6b788f55f3459cb40a606f9d36eaa2",
+            "width": 1000,
+            "height": 1000,
+            "file_name": "test_image_0.jpg",
+            "date_captured": "2022-05-11 11:51:37.366148",
+            "azure_url": "https://picsum.photos/200/300",
+            "meta": {
+                "light": 0
+            }
+        },
+        {
+            "id": "8bec8b50a5074648a70868f30024371e",
+            "width": 1000,
+            "height": 1000,
+            "file_name": "test_image_1.jpg",
+            "date_captured": "2022-05-11 11:51:37.366148",
+            "azure_url": "https://picsum.photos/200/300",
+            "meta": {
+                "light": 1
+            }
+        },
+        {
+            "id": "7f48977cc8714c3b80f5f27c6f327d6d",
+            "width": 1000,
+            "height": 1000,
+            "file_name": "test_image_2.jpg",
+            "date_captured": "2022-05-11 11:51:37.366148",
+            "azure_url": "https://picsum.photos/200/300",
+            "meta": {
+                "light": 2
+            }
+        },
+        {
+            "id": "6fbd322752a04ddfb6de454d935773f5",
+            "width": 1000,
+            "height": 1000,
+            "file_name": "test_image_3.jpg",
+            "date_captured": "2022-05-11 11:51:37.366148",
+            "azure_url": "https://picsum.photos/200/300",
+            "meta": {
+                "light": 3
+            }
+        }
+    ],
+    "multilayer_images": [
+        {
+            "id": "1f5633446d24405b9d0c5133f9f94c10",
+            "image_id": [
+                "ca6b788f55f3459cb40a606f9d36eaa2",
+                "8bec8b50a5074648a70868f30024371e",
+                "7f48977cc8714c3b80f5f27c6f327d6d",
+                "6fbd322752a04ddfb6de454d935773f5"
+            ],
+            "name": "External_id_of_image",
+            "meta": {
+                "CAB": "aa4b04212b8a4713a754dd0b2e313b2e"
+            }
+        }
+    ]
+}
