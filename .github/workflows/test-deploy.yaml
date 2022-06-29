@@ -1,0 +1,65 @@
+name: Test and Deploy
+
+on: [pull_request, push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.6","3.7","3.8","3.9"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-verion }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install package
+      run: |
+        python -m pip install -U pip
+        python -m pip install .[dev]
+    - name: test
+      run: |
+        pytest tests --doctest-modules --junitxml=junit/test-results-${{ matrix.python-version }}.xml --cov=yarrow --cov-report=xml --cov-report=html
+    - name: Upload code coverage
+      uses: actions/upload-artifact@v2
+      with:
+        name: pytest-results-${{ matrix.python-version }}
+        path: junit/test-results-${{ matrix.python-version }}.xml
+      if: ${{ always() }}
+    - name: lint
+      run: |
+        black .
+        isort .
+
+  build:
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+      - name: Build package
+        run: |
+          python setup.py sdist bdist_wheel
+      - name: Upload wheels
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: dist
+
+  deploy:
+    needs : build
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v2
+        with:
+          name: build
+      - name: Publish package
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/

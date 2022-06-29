@@ -46,4 +46,6 @@ if __name__ == "__main__":
     with open(
         "examples/generate_overlays/example_overlays_multilayer.yarrow.json", "w"
     ) as fp:
-        json.dump(yarrowset.pydantic().dict(exclude_none=True), fp, default=str, indent=4)
+        json.dump(
+            yarrowset.pydantic().dict(exclude_none=True), fp, default=str, indent=4
+        )
