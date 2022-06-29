@@ -30,8 +30,8 @@ jobs:
       if: ${{ always() }}
     - name: lint
       run: |
-        black .
-        isort .
+        black --check .
+        isort -c .
 
   build:
     needs: test
