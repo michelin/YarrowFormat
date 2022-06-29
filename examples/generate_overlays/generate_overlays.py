@@ -1,8 +1,10 @@
-from pydantic import BaseModel
-import yarrow
-from datetime import datetime
 import json
+from datetime import datetime
 from uuid import uuid4
+
+from pydantic import BaseModel
+
+import yarrow
 
 
 class FakeMeta(BaseModel):
