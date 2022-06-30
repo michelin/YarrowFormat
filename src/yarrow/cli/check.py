@@ -1,7 +1,9 @@
+"""CLI value validity functions. Experimental
+"""
 import click
 
 from ..yarrow import YarrowDataset_pydantic
-from .open import open
+from .open import open_yarrow
 
 
 def check_default(yar: YarrowDataset_pydantic):
@@ -30,7 +32,7 @@ pattern_available = {"default": check_default}
 )
 def check(file_path=None, json_str=None, json_opt=False, pattern=None):
 
-    yar = open(file_path, json_str)
+    yar = open_yarrow(file_path, json_str)
 
     if json_opt:
         click.echo({"result": True, "yarrow": yar.json(exclude_unset=True)})

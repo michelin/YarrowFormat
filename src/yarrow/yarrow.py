@@ -510,7 +510,7 @@ class YarrowDataset_pydantic(BaseModel):
 
     def save_to_file(self, fp):
         with open(fp, "w") as fp:
-            json.dump(self.dict(exclude_none=None), fp, default=str)
+            json.dump(self.dict(exclude_none=True), fp, default=str)
 
     def _check_valid_ids(self):
         results = []

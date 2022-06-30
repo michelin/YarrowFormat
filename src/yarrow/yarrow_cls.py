@@ -1,3 +1,14 @@
+"""Yarrow classes, enable the schema to be used more efficiently at runtime.
+
+Contains all the non-pydantic class definitions
+
+    To pydantic conversion:
+    
+    img = Image(...)
+    img_pydantic = img.pydantic() # you have a Image_pydantic instance
+    
+    img_as_dict = img_pydantic.dict() # now you have a dict
+"""
 from datetime import datetime
 from warnings import warn
 
@@ -6,7 +17,7 @@ from pydantic import StrBytes
 from .yarrow import *
 
 
-class Image(object):
+class Image:
     def __init__(
         self,
         width: int,
@@ -87,7 +98,7 @@ class Image(object):
         )
 
 
-class Annotation(object):
+class Annotation:
     def __init__(
         self,
         contributor: Contributor,
@@ -253,7 +264,7 @@ class Annotation(object):
         )
 
 
-class MultilayerImage(object):
+class MultilayerImage:
     def __init__(
         self,
         images: List[Image] = None,
@@ -315,7 +326,7 @@ class MultilayerImage(object):
         )
 
 
-class YarrowDataset(object):
+class YarrowDataset:
     def __init__(
         self,
         info: Info,
