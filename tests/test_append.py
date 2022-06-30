@@ -22,7 +22,7 @@ def compare_yarrow_datasets_pydantic(
     assert dataset1.confidential == dataset2.confidential
     assert dataset1.contributors == dataset2.contributors
     assert dataset1.categories == dataset2.categories
-    assert dataset1.multilayer_images == dataset2.multilayer_images
+    assert set(dataset1.multilayer_images) == set(dataset2.multilayer_images)
 
 
 def test_append_same(yar_dataset: YarrowDataset_pydantic):

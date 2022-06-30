@@ -95,12 +95,14 @@ class MultilayerImage_pydantic(BaseModel):
 
     def __hash__(self) -> int:
         warn("Multilayer_image.__hash__ is only well defined inside a YarrowDataset")
-        return hash((*self.image_id, self.name))
+        return hash((*set(self.image_id), self.name))
 
     def __eq__(self, other: Any) -> bool:
         warn("Multilayer_image.__eq__ is only well defined inside a YarrowDataset")
         if isinstance(other, MultilayerImage_pydantic):
-            return all((self.image_id == other.image_id, self.name == other.name))
+            return all(
+                (set(self.image_id) == set(other.image_id), self.name == other.name)
+            )
         return NotImplemented
 
 
@@ -144,11 +146,17 @@ class Category(BaseModel):
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Category):
-            return self.name == other.name
+            return all(
+                (
+                    self.name == other.name,
+                    self.value == other.value,
+                    self.super_category == other.super_category,
+                )
+            )
         return NotImplemented
 
     def __hash__(self):
-        return hash((self.name,))
+        return hash((self.name, self.value, self.super_category))
 
 
 class RLE(BaseModel):
@@ -371,7 +379,17 @@ class YarrowDataset_pydantic(BaseModel):
             annot for annot in self.annotations if not annot.image_id in image_ids
         ]
 
-    def _get_subset_data_by_images_ids(self, images_ids: List[str]):
+    def _get_subset_data_by_images_ids(
+        self, images_ids: List[str]
+    ) -> "YarrowDataset_pydantic":
+        """Returns a subset of images based on a list of ids.
+        This is experimental and does not work as expected
+
+        :param images_ids: List of image ids
+        :type images_ids: List[str]
+        :return: A dataset containing all the objects *completely* related to the images
+        :rtype: YarrowDataset_pydantic
+        """
         images_ids_set = set(images_ids)
 
         images = []
@@ -383,8 +401,11 @@ class YarrowDataset_pydantic(BaseModel):
 
         multilayer_images = []
         for multi_img in self.multilayer_images:
-            if set(multi_img.image_id).issubset(images_ids_set):
-                multilayer_images.append(multi_img)
+            id_intersect = set(multi_img.image_id).intersection(images_ids_set)
+            if len(id_intersect) > 0:
+                temp_multi = multi_img.copy()
+                temp_multi.image_id = list(id_intersect)
+                multilayer_images.append(temp_multi)
 
         confidential = [
             confid for confid in self.confidential if confid.id in confidential_ids
@@ -395,16 +416,18 @@ class YarrowDataset_pydantic(BaseModel):
         contributor_ids = set()
         category_ids = set()
         for annot in self.annotations:
-            if type(annot.image_id) == List:
-                if not set(annot.image_id).issubset(images_ids_set):
-                    continue
+            if not isinstance(annot.image_id, list):
+                annot_id_set = set((annot.image_id,))
             else:
-                if not annot.image_id in images_ids_set:
-                    continue
-            annotations.append(annot)
-            annotations_ids.add(annot.id)
-            category_ids.add(annot.category_id)
-            contributor_ids.add(annot.contributor_id)
+                annot_id_set = set(annot.image_id)
+            annot_id_intersect = annot_id_set.intersection(images_ids_set)
+            if len(annot_id_intersect) > 0:
+                temp_annot = annot.copy(deep=True)
+                temp_annot.image_id = list(annot_id_intersect)
+                annotations.append(annot)
+                annotations_ids.add(annot.id)
+                category_ids.add(annot.category_id)
+                contributor_ids.add(annot.contributor_id)
 
         categories = [cat for cat in self.categories if cat.id in category_ids]
         contributors = [

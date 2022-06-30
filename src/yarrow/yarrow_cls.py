@@ -73,6 +73,7 @@ class Image(object):
                     self.height == other.height,
                 )
             )
+        return NotImplemented
 
     def __hash__(self) -> int:
         return hash((self.file_name, self.width, self.height))
@@ -298,6 +299,7 @@ class MultilayerImage(object):
     def __eq__(self, other):
         if isinstance(other, MultilayerImage):
             return all((self.images == other.images, self.name == other.name))
+        return NotImplemented
 
     def pydantic(self, reset: bool = False):
         if self._pydantic is None or reset:
@@ -384,6 +386,7 @@ class YarrowDataset(object):
                     ),
                 )
             )
+        return NotImplemented
 
     def add_annotations(self, annots: List[Annotation]) -> List[Annotation]:
         """DONT NEED TO ADD IMAGE AFTER THIS. Insertion is done in place
