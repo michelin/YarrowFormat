@@ -63,6 +63,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: build
+          path: dist
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
