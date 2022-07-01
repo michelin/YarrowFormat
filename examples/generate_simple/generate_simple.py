@@ -1,6 +1,7 @@
-import yarrow
-from datetime import datetime
 import json
+from datetime import datetime
+
+import yarrow
 
 if __name__ == "__main__":
     info = yarrow.Info(source="Demo", date_created=datetime.now())
