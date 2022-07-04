@@ -105,6 +105,11 @@ class MultilayerImage_pydantic(BaseModel):
             )
         return NotImplemented
 
+    def __repr__(self):
+        return "MultilayerImage_pydantic(id={}, image_id={}, name={}, meta={})".format(
+            self.id, list(set(self.image_id)), self.name, self.meta
+        )
+
 
 class Clearance(BaseModel):
     # fmt: off
