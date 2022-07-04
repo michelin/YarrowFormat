@@ -13,7 +13,7 @@ and used in Michelin projects.
 ## How to install
 
 ```sh
-pip install yarrow
+pip install yarrowformat
 ```
 
 ## How to use
