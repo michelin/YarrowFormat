@@ -95,13 +95,16 @@ class MultilayerImage_pydantic(BaseModel):
 
     def __hash__(self) -> int:
         warn("Multilayer_image.__hash__ is only well defined inside a YarrowDataset")
-        return hash((*set(self.image_id), self.name))
+        return hash((*sorted(self.image_id), self.name))
 
     def __eq__(self, other: Any) -> bool:
         warn("Multilayer_image.__eq__ is only well defined inside a YarrowDataset")
         if isinstance(other, MultilayerImage_pydantic):
             return all(
-                (set(self.image_id) == set(other.image_id), self.name == other.name)
+                (
+                    sorted(self.image_id) == sorted(other.image_id),
+                    self.name == other.name,
+                )
             )
         return NotImplemented
 
