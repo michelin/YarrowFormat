@@ -2,6 +2,8 @@
 
 ---------------
 
+[![PyPI version](https://badge.fury.io/py/yarrowformat.svg)](https://badge.fury.io/py/yarrowformat) [![Documentation Status](https://readthedocs.org/projects/yarrowformat/badge/?version=latest)](https://yarrowformat.readthedocs.io/en/latest/?badge=latest) [![Test and Deploy](https://github.com/michelin/YarrowFormat/actions/workflows/test-deploy.yaml/badge.svg)](https://github.com/michelin/YarrowFormat/actions/workflows/test-deploy.yaml) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+
 ## What is it ?
 
 **yarrow** is a python package to parse, manipulate and serialize data
@@ -18,7 +20,7 @@ pip install yarrowformat
 
 ## How to use
 
-You can find multiple examples in the [examples directory](/examples/) and soon in a proper documentation (WIP). Here are a few examples.
+You can find multiple examples in the [examples directory](/examples/) and the package API in the [documentation](https://yarrowformat.readthedocs.io/en/latest/?badge=latest) (still WIP). Here are a few examples.
 
 ```python
 import json
