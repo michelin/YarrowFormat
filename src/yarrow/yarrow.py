@@ -20,6 +20,7 @@ class Info(BaseModel):
     source          : Union[str, dict]
     date_created    : datetime
     destination     : Optional[dict]
+    meta            : Optional[dict]
     # fmt: on
 
 
@@ -242,6 +243,7 @@ class Annotation_pydantic(BaseModel):
     is_crowd        : Optional[int] = Field(default=0, deprecated=True)
     mask            : Optional[RLE]
     polygon         : Optional[List[List[float]]]
+    polyline        : Optional[List[List[float]]]
     area            : Optional[float]
     bbox            : Optional[List[float]]
     keypoints       : Optional[List[List[float]]]
