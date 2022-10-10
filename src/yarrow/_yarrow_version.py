@@ -1,1 +1,1 @@
-_yarrow_version = "1.0-12.05.2022"
+_yarrow_version = "1.1-10.10.2022"

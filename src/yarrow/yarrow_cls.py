@@ -109,6 +109,7 @@ class Annotation:
         segmentation: Union[RLE, List[List[float]]] = None,
         is_crowd: int = None,
         polygon: List[List[float]] = None,
+        polyline: List[List[float]] = None,
         mask: RLE = None,
         area: float = None,
         bbox: List[float] = None,
@@ -143,7 +144,8 @@ class Annotation:
             comment (str, optional): simple string comment. Defaults to None.
             segmentation (Union[RLE, List[List[float]]], optional): DEPRECATED, contains a mask or a polygon. Defaults to None.
             is_crowd (int, optional): DEPRECATED, 0 if segmentation contains a polygon, 1 if it contains a mask. Defaults to 0.
-            polygon (List[List[float]], optional):
+            polygon (List[List[float]], optional): A polygon made of points, it is assumed that the shape is closed, DO NOT add the first point at the end of the list
+            polyline (List[List[float]], optional): A line made of points
             mask (RLE, optional):
             area (float, optional): relative surface area of the image covered by the annotation. Defaults to None.
             bbox (List[float], optional): bounding box, order[left, top, right, bot]. Defaults to None.
@@ -183,6 +185,7 @@ class Annotation:
         self.is_crowd = is_crowd or 0
 
         self.polygon = polygon
+        self.polyline = polyline
         self.mask = mask
         self._poly_mask_validator()
 
@@ -207,6 +210,7 @@ class Annotation:
                     self.contributor == other.contributor,
                     self.categories == other.categories,
                     self.polygon == other.polygon,
+                    self.polyline == other.polyline,
                     self.mask == other.mask,
                     self.bbox == other.bbox,
                     self.keypoints == other.keypoints,
@@ -215,9 +219,18 @@ class Annotation:
         return NotImplemented
 
     def _poly_mask_validator(self):
-        if self.polygon and self.mask:
+        if (
+            sum(
+                (
+                    self.polygon is not None,
+                    self.polyline is not None,
+                    self.mask is not None,
+                )
+            )
+            > 1
+        ):
             raise ValueError(
-                "Polygon and mask should not both be given, use one at a time"
+                "Polygon, Polyline and Mask should not be given simultaneously, use one at a time"
             )
         return True
 

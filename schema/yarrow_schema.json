@@ -59,7 +59,7 @@
             "properties": {
                 "version": {
                     "title": "Version",
-                    "default": "1.0-12.05.2022",
+                    "default": "1.1-10.10.2022",
                     "type": "string"
                 },
                 "source": {
@@ -80,6 +80,10 @@
                 },
                 "destination": {
                     "title": "Destination",
+                    "type": "object"
+                },
+                "meta": {
+                    "title": "Meta",
                     "type": "object"
                 }
             },
@@ -292,6 +296,16 @@
                 },
                 "polygon": {
                     "title": "Polygon",
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "polyline": {
+                    "title": "Polyline",
                     "type": "array",
                     "items": {
                         "type": "array",
