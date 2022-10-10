@@ -516,9 +516,33 @@ class YarrowDataset_pydantic(BaseModel):
     def _clean_unused(self):
         return NotImplemented
 
-    def save_to_file(self, fp):
+    def save_to_file(
+        self,
+        fp: str,
+        exclude_unset: bool = True,
+        indent: int = 4,
+        default=str,
+        **kwargs
+    ):
+        """Save this dataset to a file
+
+        :param fp: File path to save the dataset to
+        :type fp: _type_
+        :param exclude_unset: Exclude unset keys you should not write what you don't use, defaults to True
+        :type exclude_unset: bool, optional
+        :param indent: Number of indents in the json file, defaults to 4
+        :type indent: int, optional
+        :param default: default(obj) is a function that should return a serializable version of obj or raise TypeError. The default simply raises TypeError, defaults to str
+        :type default: obj, optional
+        """
         with open(fp, "w") as fp:
-            json.dump(self.dict(exclude_none=True), fp, default=str)
+            json.dump(
+                self.dict(exclude_unset=exclude_unset),
+                fp,
+                default=default,
+                indent=indent,
+                **kwargs
+            )
 
     def _check_valid_ids(self):
         results = []
