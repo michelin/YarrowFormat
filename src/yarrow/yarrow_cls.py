@@ -656,7 +656,7 @@ class YarrowDataset:
         for img_values in img_id_dict.values():
             img_list.extend(img_values)
 
-        return YarrowDataset(
+        return cls(
             info=yarrow.info,
             images=img_list,
             annotations=annot_list,
