@@ -1,53 +1,53 @@
 {
     "info": {
-        "version": "1.0-08.04.2022",
+        "version": "1.1-10.10.2022",
         "source": "example",
-        "date_created": "2022-04-29 18:02:14.617078"
+        "date_created": "2023-02-10 09:24:53.056543"
     },
     "images": [
         {
-            "id": "3c3f2c12e4cc4625a19f4876dab39f79",
+            "id": "104f2926652f4eeca45ae4cd67f6015e",
             "width": 300,
             "height": 200,
             "file_name": "path/to/image.jpeg",
-            "date_captured": "2022-04-29 18:02:14.617078",
+            "date_captured": "2023-02-10 09:24:53.056543",
             "azure_url": "http://<online_storage>/path/to/image.jpeg"
         }
     ],
     "annotations": [
         {
-            "id": "3eb03b9743d54b78b55dffa94568987e",
+            "id": "f2bba493d3af4ce28075f68d515679a5",
             "image_id": [
-                "3c3f2c12e4cc4625a19f4876dab39f79"
+                "104f2926652f4eeca45ae4cd67f6015e"
             ],
             "category_id": [
-                "58985e80862248f2b2fffb42fde549b6"
+                "0d8b0e66545e4afcae760a8754f5914a"
             ],
-            "contributor_id": "6230b898bafd4244898e1e1724b476f6",
+            "contributor_id": "c5af5b49dd474eb8ac61e274a5c5ecfa",
             "name": "bump",
             "is_crowd": 0,
             "bbox": [
-                50.0,
-                50.0,
-                75.0,
-                75.0
+                0.5,
+                0.5,
+                0.75,
+                0.75
             ],
-            "date_captured": "2022-04-29 18:02:14.617078"
+            "date_captured": "2023-02-10 09:24:53.056543"
         }
     ],
     "contributors": [
         {
-            "id": "6230b898bafd4244898e1e1724b476f6",
+            "id": "c5af5b49dd474eb8ac61e274a5c5ecfa",
             "human": true,
             "name": "labeler"
         }
     ],
     "categories": [
         {
-            "id": "58985e80862248f2b2fffb42fde549b6",
-            "name": "CQ",
-            "super_category": "CQ",
-            "value": "15.1"
+            "id": "0d8b0e66545e4afcae760a8754f5914a",
+            "name": "Defect",
+            "value": "15.1",
+            "super_category": "Defect"
         }
     ]
 }

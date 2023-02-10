@@ -521,7 +521,8 @@ class YarrowDataset_pydantic(BaseModel):
     def save_to_file(
         self,
         fp: str,
-        exclude_unset: bool = True,
+        exclude_unset: bool = False,
+        exclude_none: bool = True,
         indent: int = 4,
         default=str,
         **kwargs
@@ -539,11 +540,12 @@ class YarrowDataset_pydantic(BaseModel):
         """
         with open(fp, "w") as fp:
             json.dump(
-                self.dict(exclude_unset=exclude_unset),
+                self.dict(
+                    exclude_unset=exclude_unset, exclude_none=exclude_none, **kwargs
+                ),
                 fp,
                 default=default,
                 indent=indent,
-                **kwargs
             )
 
     def _check_valid_ids(self):

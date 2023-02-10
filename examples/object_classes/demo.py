@@ -14,14 +14,14 @@ if __name__ == "__main__":
 
     contrib = Contributor(human=True, name="labeler")
 
-    categ = Category(name="CQ", super_category="CQ", value="15.1")
+    categ = Category(name="Defect", super_category="Defect", value="15.1")
 
     annot = Annotation(
         contributor=contrib,
         name="bump",
         images=[img],
         categories=[categ],
-        bbox=[50, 50, 75, 75],
+        bbox=[0.5, 0.5, 0.75, 0.75],
         date_captured=datetime.now(),
     )
 
@@ -30,4 +30,6 @@ if __name__ == "__main__":
 
     yar_set.add_annotation(annot)
 
-    yar_set_dict = yar_set.pydantic().save_to_file("examples/object_classes/demo.yarrow.json")
+    yar_set_dict = yar_set.pydantic().save_to_file(
+        "examples/object_classes/demo.yarrow.json"
+    )
