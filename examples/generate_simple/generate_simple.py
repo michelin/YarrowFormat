@@ -6,7 +6,7 @@ import yarrow
 if __name__ == "__main__":
     info = yarrow.Info(source="Demo", date_created=datetime.now())
 
-    image = yarrow.Image_pydantic(
+    image = yarrow.Image(
         width=1000,
         height=1000,
         file_name="test_image.jpg",
@@ -14,7 +14,8 @@ if __name__ == "__main__":
         azure_url="https://picsum.photos/200/300",
     )
 
-    yarrowset = yarrow.YarrowDataset_pydantic(info=info, images=[image])
+    yarrowset = yarrow.YarrowDataset(info=info, images=[image])
 
-    with open("examples/generate_simple/example_simple.yarrow.json", "w") as fp:
-        json.dump(yarrowset.dict(exclude_unset=True), fp, default=str, indent=4)
+    yarrowset.pydantic().save_to_file(
+        "examples/generate_simple/example_simple.yarrow.json",
+    )

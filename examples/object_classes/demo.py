@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 
 from yarrow import *
@@ -31,7 +30,4 @@ if __name__ == "__main__":
 
     yar_set.add_annotation(annot)
 
-    yar_set_dict = yar_set.pydantic().dict(exclude_none=True)
-
-    with open("examples/object_classes/demo.yarrow.json", "w") as fp:
-        json.dump(yar_set_dict, fp, default=str, indent=4)
+    yar_set_dict = yar_set.pydantic().save_to_file("examples/object_classes/demo.yarrow.json")
