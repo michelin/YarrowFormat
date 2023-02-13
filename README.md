@@ -12,6 +12,8 @@ oriented around computer vision data and is heavily inspired by the COCO
 [dataset format](https://cocodataset.org/#format-data) and was initially developed
 and used in Michelin projects.
 
+The full description can be found [here](schema/description.md) with the rules on how to fill different fields.
+
 ## How to install
 
 ```sh
@@ -42,6 +44,10 @@ with open("path/to/other/file.yarrow.json", "w") as fp:
     json.dump(yar_set.pydantic().dict(), fp, default=str)
 
 ```
+
+## Format explanation
+
+
 
 ## License
 

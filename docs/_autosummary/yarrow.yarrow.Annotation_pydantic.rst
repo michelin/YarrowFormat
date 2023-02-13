@@ -1,4 +1,4 @@
-yarrow.yarrow.Annotation\_pydantic
+﻿yarrow.yarrow.Annotation\_pydantic
 ==================================
 
 .. currentmodule:: yarrow.yarrow
@@ -48,6 +48,7 @@ yarrow.yarrow.Annotation\_pydantic
       ~Annotation_pydantic.is_crowd
       ~Annotation_pydantic.mask
       ~Annotation_pydantic.polygon
+      ~Annotation_pydantic.polyline
       ~Annotation_pydantic.area
       ~Annotation_pydantic.bbox
       ~Annotation_pydantic.keypoints

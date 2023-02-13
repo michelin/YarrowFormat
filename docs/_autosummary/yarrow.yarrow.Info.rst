@@ -1,4 +1,4 @@
-yarrow.yarrow.Info
+﻿yarrow.yarrow.Info
 ==================
 
 .. currentmodule:: yarrow.yarrow
@@ -42,5 +42,6 @@ yarrow.yarrow.Info
       ~Info.source
       ~Info.date_created
       ~Info.destination
+      ~Info.meta
    
    
