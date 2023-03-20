@@ -330,13 +330,13 @@ def test_same_elem_insertion_remap(yar_dataset: YarrowDataset):
     annot2.contributor = new_contrib
     annot2.categories = new_categories
 
-    yar_dataset.add_annotation(annot2)
+    annot3 = yar_dataset.add_annotation(annot2)
 
-    for img1, img2 in zip(annot1.images, annot2.images):
+    for img1, img2 in zip(annot1.images, annot3.images):
         assert img1 is img2
-    for cat1, cat2 in zip(annot1.categories, annot2.categories):
+    for cat1, cat2 in zip(annot1.categories, annot3.categories):
         assert cat1 is cat2
-    assert annot2.contributor is annot1.contributor
+    assert annot3.contributor is annot1.contributor
 
 
 def test_set_split_should_set_all_images(yar_dataset: YarrowDataset):

@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import pytest
 
 from yarrow import *
@@ -5,12 +7,12 @@ from yarrow import *
 
 @pytest.fixture
 def yar_dataset():
-    return rand_dataset()
+    return YarrowDataset.from_yarrow(rand_dataset())
 
 
 @pytest.fixture
 def yar_empty(yar_dataset):
-    return YarrowDataset_pydantic(info=yar_dataset.info, images=[])
+    return YarrowDataset(info=yar_dataset.info, images=[])
 
 
 def compare_yarrow_datasets_pydantic(
@@ -25,56 +27,16 @@ def compare_yarrow_datasets_pydantic(
     assert set(dataset1.multilayer_images) == set(dataset2.multilayer_images)
 
 
-def test_append_same(yar_dataset: YarrowDataset_pydantic):
-    yarrow_dataset2 = yar_dataset.copy(deep=True)
+def test_append_same(yar_dataset: YarrowDataset):
+    yarrow_dataset2 = deepcopy(yar_dataset)
 
     yarrow_dataset2.append(yar_dataset)
 
-    compare_yarrow_datasets_pydantic(yar_dataset, yarrow_dataset2)
+    assert yar_dataset == yarrow_dataset2
 
 
-def test_append_empty(yar_dataset: YarrowDataset_pydantic):
-    yar_empty = YarrowDataset_pydantic(info=yar_dataset.info, images=[])
+def test_append_empty(yar_dataset: YarrowDataset):
+    yar_empty = YarrowDataset(info=yar_dataset.info, images=[])
     yar_empty.append(yar_dataset)
 
-    compare_yarrow_datasets_pydantic(yar_dataset, yar_empty)
-
-
-def test_subset_by_images_empty(
-    yar_dataset: YarrowDataset_pydantic, yar_empty: YarrowDataset_pydantic
-):
-    yar_subset = yar_dataset._get_subset_data_by_images_ids([])
-
-    compare_yarrow_datasets_pydantic(yar_empty, yar_subset)
-
-
-def test_subset_by_images_filled(yar_dataset: YarrowDataset_pydantic):
-    yar_merged = rand_dataset(info=yar_dataset.info)
-    yar_merged.append(yar_dataset)
-    yar_subset = yar_merged._get_subset_data_by_images_ids(
-        [img.id for img in yar_dataset.images]
-    )
-
-    compare_yarrow_datasets_pydantic(yar_subset, yar_dataset)
-
-
-def test_subset_by_annots_empty(
-    yar_dataset: YarrowDataset_pydantic, yar_empty: YarrowDataset_pydantic
-):
-    yar_subset = yar_dataset._get_subset_by_annotation_ids([])
-
-    compare_yarrow_datasets_pydantic(yar_subset, yar_empty)
-
-
-def test_subset_by_annot_filled(yar_dataset: YarrowDataset_pydantic):
-    yar_merged = rand_dataset(info=yar_dataset.info)
-    yar_merged.append(yar_dataset)
-
-    yar_subset = yar_merged._get_subset_by_annotation_ids(
-        [annot.id for annot in yar_dataset.annotations]
-    )
-    yar_dataset_minimal = yar_dataset._get_subset_by_annotation_ids(
-        [annot.id for annot in yar_dataset.annotations]
-    )
-
-    compare_yarrow_datasets_pydantic(yar_dataset_minimal, yar_subset)
+    assert yar_dataset == yar_empty

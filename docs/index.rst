@@ -11,6 +11,7 @@ Welcome to Yarrow's documentation!
     :caption: Contents:
 
     api.rst
+    append.rst
 
 Indices and tables
 ==================

@@ -1,4 +1,4 @@
-yarrow.yarrow.YarrowDataset\_pydantic
+﻿yarrow.yarrow.YarrowDataset\_pydantic
 =====================================
 
 .. currentmodule:: yarrow.yarrow
@@ -17,7 +17,6 @@ yarrow.yarrow.YarrowDataset\_pydantic
    .. autosummary::
    
       ~YarrowDataset_pydantic.__init__
-      ~YarrowDataset_pydantic.append
       ~YarrowDataset_pydantic.construct
       ~YarrowDataset_pydantic.copy
       ~YarrowDataset_pydantic.dict

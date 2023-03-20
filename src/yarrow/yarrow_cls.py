@@ -2,13 +2,14 @@
 
 Contains all the non-pydantic class definitions
 
-    To pydantic conversion:
-    
-    img = Image(...)
+Each class has a pydantic conversion:
+
+>>> img = Image(...)
     img_pydantic = img.pydantic() # you have a Image_pydantic instance
-    
     img_as_dict = img_pydantic.dict() # now you have a dict
+
 """
+from copy import copy
 from datetime import datetime
 from warnings import warn
 
@@ -442,7 +443,10 @@ class YarrowDataset:
         return list(result)
 
     def add_annotation(self, annot: Annotation) -> Annotation:
-        """DONT NEED TO ADD IMAGE AFTER THIS. Insertion is done in place
+        """YOU DO NOT NEED TO ADD IMAGE AFTER THIS. Insertion is done in place
+        If the annotation already exists in the dataset, it will not be added and this function will return the one found
+
+        Be careful, to overwrite metadata you should modify directly the object and not try to overwrite it
 
         Args:
             annot (Annotation)
@@ -450,6 +454,7 @@ class YarrowDataset:
         Return:
             (Annotation)
         """
+        annot = copy(annot)
         annot.images = self.add_images(annot.images)
 
         out_cat = set(annot.categories)
@@ -471,7 +476,11 @@ class YarrowDataset:
         else:
             annot.contributor = elem_in
 
-        self.annotations.append(annot)
+        elem_in = next((elem for elem in self.annotations if elem == annot), None)
+        if elem_in is None:
+            self.annotations.append(annot)
+        else:
+            return elem_in
         return annot
 
     def add_images(self, images: List[Image]) -> List[Image]:
@@ -501,6 +510,7 @@ class YarrowDataset:
         Return:
             (Image)
         """
+        image = copy(image)
         if not image.confidential is None:
             elem_in = next(
                 (elem for elem in self.confidential if elem == image.confidential), None
@@ -532,6 +542,15 @@ class YarrowDataset:
     def add_multilayer_images(
         self, multilayer_list: List[MultilayerImage]
     ) -> List[MultilayerImage]:
+        """Adds a list of multilayer images and returns the actual multilayer images that are present in the dataset.
+        The returned list will contain links to the objects in the current YarrowDataset
+
+        Args:
+            multilayer_list (List[MultilayerImage]): Input MultilayerImage list
+
+        Returns:
+            List[MultilayerImage]: MultilayerImage list with the current dataset objects linked
+        """
         result = set()
         for multi in multilayer_list:
             result.add(self.add_multilayer_image(multi))
@@ -607,6 +626,25 @@ class YarrowDataset:
                 new_yarrow_set.add_multilayer_image(multi)
 
         return new_yarrow_set
+
+    def append(self, yarrow: "YarrowDataset") -> None:
+        """Appends another YarrowDataset to this dataset. The resulting dataset is this object
+        The objects added will be the annotations, the multilayer_images and the images
+
+        Args:
+            yarrow (YarrowDataset): Input Yarrow to be merge
+        """
+        self.add_annotations(yarrow.annotations)
+        self.add_multilayer_images(yarrow.multilayer_images)
+        self.add_images(yarrow.images)
+
+        for cat in yarrow.categories:
+            if cat not in self.categories:
+                self.categories.append(cat)
+
+    def extend(self, yarrows: List["YarrowDataset"]) -> None:
+        for yarrow in yarrows:
+            self.append(yarrow)
 
     @classmethod
     def from_yarrow(cls, yarrow: YarrowDataset_pydantic) -> "YarrowDataset":
