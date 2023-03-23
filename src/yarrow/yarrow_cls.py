@@ -340,7 +340,7 @@ class MultilayerImage:
             name=self.name,
             image_id=[img.pydantic().id for img in self.images],
             meta=self.meta,
-            split=self.split
+            split=self.split,
         )
 
 
@@ -554,23 +554,24 @@ class YarrowDataset:
             else None,
         )
 
-    def set_split(self, split:str) -> None:
+    def set_split(self, split: str) -> None:
         for image in self.images:
             image.split = split
         for multilayer in self.multilayer_images:
             multilayer.split = split
 
-    def get_split(self, split:str) -> "YarrowDataset":
+    def get_split(self, split: str) -> "YarrowDataset":
         new_yarrow_set = YarrowDataset(info=self.info)
-        
+
         for annot in self.annotations:
-            if len(annot.images) > 0 and annot.images[0].split == split: # Very strong assumption that all images of the annotation have the same value for split
+            # Very strong assumption that all images of the annotation have the same value for split
+            if len(annot.images) > 0 and annot.images[0].split == split:
                 new_yarrow_set.add_annotation(annot)
-        
+
         for multi in self.multilayer_images:
             if multi.split == split:
                 new_yarrow_set.add_multilayer_image(multi)
-    
+
         return new_yarrow_set
 
     @classmethod
