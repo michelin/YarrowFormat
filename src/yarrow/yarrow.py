@@ -63,6 +63,7 @@ class Image_pydantic(BaseModel):
     comment         : Optional[str]
     asset_id        : Optional[str]
     layers          : Optional[List[Layer]]
+    split           : Optional[str]
     # fmt: on
 
     def __eq__(self, other) -> bool:
@@ -91,7 +92,8 @@ class MultilayerImage_pydantic(BaseModel):
     id              : str = Field(default_factory=uuid_init)
     image_id        : List[str] = Field(default_factory=list)
     name            : Optional[str] = ""
-    meta            : Optional[dict] 
+    meta            : Optional[dict]
+    split           : Optional[str]
     # fmt: on
 
     def __hash__(self) -> int:

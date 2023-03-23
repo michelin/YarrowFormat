@@ -30,6 +30,7 @@ class Image:
         meta: dict = None,
         comment: str = None,
         asset_id: str = None,
+        split: str = None,
         **kwargs
     ) -> None:
         """Image object, not a pydantic class, represents the image informations
@@ -57,6 +58,7 @@ class Image:
         self.meta = meta
         self.comment = comment
         self.asset_id = asset_id
+        self.split = split
 
         self._pydantic_self = None
 
@@ -284,6 +286,7 @@ class MultilayerImage:
         name: str = None,
         meta: dict = None,
         id: str = None,
+        split: str = None,
     ) -> None:
         """MultilayerImage class. Represents a collection of `Image` that should be
         considered as one element.
@@ -314,6 +317,7 @@ class MultilayerImage:
         self.images = images or []
         self.name = name or ""
         self.meta = meta or {}
+        self.split = split
 
         self._pydantic = None
 
@@ -336,6 +340,7 @@ class MultilayerImage:
             name=self.name,
             image_id=[img.pydantic().id for img in self.images],
             meta=self.meta,
+            split=self.split
         )
 
 
@@ -548,6 +553,25 @@ class YarrowDataset:
             if len(self.multilayer_images) > 0
             else None,
         )
+
+    def set_split(self, split:str) -> None:
+        for image in self.images:
+            image.split = split
+        for multilayer in self.multilayer_images:
+            multilayer.split = split
+
+    def get_split(self, split:str) -> "YarrowDataset":
+        new_yarrow_set = YarrowDataset(info=self.info)
+        
+        for annot in self.annotations:
+            if len(annot.images) > 0 and annot.images[0].split == split: # Very strong assumption that all images of the annotation have the same value for split
+                new_yarrow_set.add_annotation(annot)
+        
+        for multi in self.multilayer_images:
+            if multi.split == split:
+                new_yarrow_set.add_multilayer_image(multi)
+    
+        return new_yarrow_set
 
     @classmethod
     def from_yarrow(cls, yarrow: YarrowDataset_pydantic) -> "YarrowDataset":
