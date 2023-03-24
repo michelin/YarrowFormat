@@ -524,7 +524,9 @@ class YarrowDataset:
             return elem_in
         return multilayer
 
-    def add_multilayer_images(self, multilayer_list: List[MultilayerImage]) -> List[MultilayerImage]:
+    def add_multilayer_images(
+        self, multilayer_list: List[MultilayerImage]
+    ) -> List[MultilayerImage]:
         result = set()
         for multi in multilayer_list:
             result.add(self.add_multilayer_image(multi))
@@ -587,7 +589,7 @@ class YarrowDataset:
 
         Returns:
             YarrowDataset: A copy of the current dataset containing only the elements linked to a given split value
-        """        
+        """
         new_yarrow_set = YarrowDataset(info=self.info)
 
         for annot in self.annotations:
