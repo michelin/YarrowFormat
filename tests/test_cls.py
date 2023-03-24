@@ -337,3 +337,34 @@ def test_same_elem_insertion_remap(yar_dataset: YarrowDataset):
     for cat1, cat2 in zip(annot1.categories, annot2.categories):
         assert cat1 is cat2
     assert annot2.contributor is annot1.contributor
+
+def test_set_split_should_set_all_images(yar_dataset: YarrowDataset):
+    def verify_split(yar_dataset: YarrowDataset, value):
+        for img in yar_dataset.images:
+            assert img.split is value
+        for multi in yar_dataset.multilayer_images:
+            assert multi.split is value
+    
+    verify_split(yar_dataset, None)
+    
+    yar_dataset.set_split("test1")
+    
+    verify_split(yar_dataset, "test1")
+
+def test_get_split_should_return_only_split(yar_dataset: YarrowDataset):
+    multi_set = set()
+    image_set = set()
+    for multi in yar_dataset.multilayer_images[::2]:
+        multi.set_split("test2")
+        multi_set.add(multi)
+        image_set = image_set.union(multi.images)
+    annot_set = set()
+    for annot in yar_dataset.annotations:
+        if image_set.issuperset(annot.images):
+            annot_set.add(annot)
+
+    res_dataset = yar_dataset.get_split("test2")
+    
+    assert multi_set == set(res_dataset.multilayer_images)
+    assert image_set == set(res_dataset.images)
+    assert annot_set == set(res_dataset.annotations)

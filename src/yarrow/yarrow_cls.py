@@ -329,6 +329,11 @@ class MultilayerImage:
             return all((self.images == other.images, self.name == other.name))
         return NotImplemented
 
+    def set_split(self, split: str):
+        self.split = split
+        for img in self.images:
+            img.split = split
+
     def pydantic(self, reset: bool = False):
         if self._pydantic is None or reset:
             self._pydantic = self._pydantic_call()
@@ -426,10 +431,10 @@ class YarrowDataset:
         Return:
             (List[Annotation]). Returns the annotation that were added
         """
-        result = []
+        result = set()
         for annot in annots:
-            result.append(self.add_annotation(annot))
-        return result
+            result.add(self.add_annotation(annot))
+        return list(result)
 
     def add_annotation(self, annot: Annotation) -> Annotation:
         """DONT NEED TO ADD IMAGE AFTER THIS. Insertion is done in place
@@ -507,7 +512,7 @@ class YarrowDataset:
             return elem_in
         return image
 
-    def add_multilayer_image(self, multilayer: MultilayerImage):
+    def add_multilayer_image(self, multilayer: MultilayerImage) -> MultilayerImage:
         multilayer.images = self.add_images(multilayer.images)
 
         elem_in = next(
@@ -518,6 +523,12 @@ class YarrowDataset:
         else:
             return elem_in
         return multilayer
+
+    def add_multilayer_images(self, multilayer_list: List[MultilayerImage]) -> List[MultilayerImage]:
+        result = set()
+        for multi in multilayer_list:
+            result.add(self.add_multilayer_image(multi))
+        return list(result)
 
     def pydantic(
         self, img_id: str = None, reset: bool = False
@@ -555,12 +566,28 @@ class YarrowDataset:
         )
 
     def set_split(self, split: str) -> None:
+        """Assigns the value of `split` to all the images and multilayer images
+
+        Args:
+            split (str): Describes the split, used to set "train"/"validate"/"test" for example
+        """
         for image in self.images:
             image.split = split
         for multilayer in self.multilayer_images:
             multilayer.split = split
 
     def get_split(self, split: str) -> "YarrowDataset":
+        """Returns a new dataset based on a `split` value. 
+        
+        The returned YarrowDataset will copy all the internal elements,\
+        meaning modifications on the new YarrowDataset won't impact the original YarrowDataset
+
+        Args:
+            split (str): The split to retrieve
+
+        Returns:
+            YarrowDataset: A copy of the current dataset containing only the elements linked to a given split value
+        """        
         new_yarrow_set = YarrowDataset(info=self.info)
 
         for annot in self.annotations:
