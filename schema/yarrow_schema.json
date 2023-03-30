@@ -351,6 +351,10 @@
                     "title": "Date Captured",
                     "type": "string",
                     "format": "date-time"
+                },
+                "meta": {
+                    "title": "Meta",
+                    "type": "object"
                 }
             },
             "required": [

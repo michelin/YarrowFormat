@@ -252,6 +252,7 @@ class Annotation_pydantic(BaseModel):
     num_keypoints   : Optional[int]
     weight          : Optional[float]
     date_captured   : Optional[datetime]
+    meta            : Optional[dict]
     # fmt: on
 
     def __eq__(self, other) -> bool:

@@ -46,6 +46,7 @@ class Image:
             meta (dict, optional): optional metadata. Defaults to None.
             comment (str, optional): optional comment. Defaults to None.
             asset_id (str, optional): unique identifier of the asset that created the picture, not used. Defaults to None.
+            split(str, optional): string to specify to which split the image belong, used to assign images to "train", "validate" or "test" when training models for example.
         """
 
         self.id = id or uuid_init()
@@ -119,6 +120,7 @@ class Annotation:
         num_keypoints: int = None,
         weight: float = None,
         date_captured: datetime = None,
+        meta: dict = None,
         **kwargs
     ) -> None:
         """Annotation class, can handle bbox, polygon, mask and keypoint annotation types \
@@ -156,6 +158,7 @@ class Annotation:
             num_keypoints (int, optional): number of labelled keypoints. Defaults to None.
             weight (float, optional): weight given to the quality of the annotation. Defaults to None.
             date_captured (datetime, optional): datetime at which the annotation was created. Defaults to None.
+            meta (dict, optional): a free metadata information key. If the Annotation cannot hold your information then put it here
         """
         self.name = name
 
@@ -197,6 +200,7 @@ class Annotation:
         self.num_keypoints = num_keypoints
         self.weight = weight
         self.date_captured = date_captured
+        self.meta = meta
 
         self._pydantic_self = None
 
@@ -312,6 +316,7 @@ class MultilayerImage:
             images (List[Image], optional): Defaults to [].
             name (str, optional): Name of the collection. Defaults to "".
             meta (dict, optional): Metadata. Defaults to {}.
+            split(str, optional): string to specify to which split the image belong, used to assign images to "train", "validate" or "test" when training models for example.
         """
         self.id = id or uuid_init()
         self.images = images or []
