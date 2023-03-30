@@ -206,7 +206,9 @@ class Annotation:
         self._pydantic_self = None
 
     def __hash__(self) -> int:
-        return hash((self.name, *set(self.images), *set(self.categories), self.contributor))
+        return hash(
+            (self.name, *set(self.images), *set(self.categories), self.contributor)
+        )
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Annotation):
@@ -215,7 +217,9 @@ class Annotation:
                     self.name == other.name,
                     not len(set(self.images).symmetric_difference(set(other.images))),
                     self.contributor == other.contributor,
-                    not len(set(self.categories).symmetric_difference(set(other.categories))),
+                    not len(
+                        set(self.categories).symmetric_difference(set(other.categories))
+                    ),
                     self.polygon == other.polygon,
                     self.polyline == other.polyline,
                     self.mask == other.mask,
@@ -329,15 +333,16 @@ class MultilayerImage:
 
     def __hash__(self):
         # return hash((*set(self.images), self.name))
-        return hash((*sorted(self.images,key=lambda x: hash(x)),self.name))
+        return hash((*sorted(self.images, key=lambda x: hash(x)), self.name))
 
     def __eq__(self, other):
         if isinstance(other, MultilayerImage):
             return all(
                 (
                     not len(set(self.images).symmetric_difference(set(other.images))),
-                    self.name == other.name
-                ))
+                    self.name == other.name,
+                )
+            )
         return NotImplemented
 
     def set_split(self, split: str):
