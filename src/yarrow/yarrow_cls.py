@@ -56,7 +56,7 @@ class Image:
         self.date_captured = date_captured
         self.azure_url = azure_url
         self.confidential = confidential
-        self.meta = meta
+        self.meta = meta or {}
         self.comment = comment
         self.asset_id = asset_id
         self.split = split
@@ -200,7 +200,7 @@ class Annotation:
         self.num_keypoints = num_keypoints
         self.weight = weight
         self.date_captured = date_captured
-        self.meta = meta
+        self.meta = meta or {}
 
         self._pydantic_self = None
 
