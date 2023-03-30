@@ -206,16 +206,16 @@ class Annotation:
         self._pydantic_self = None
 
     def __hash__(self) -> int:
-        return hash((self.name, *self.images, *self.categories, self.contributor))
+        return hash((self.name, *set(self.images), *set(self.categories), self.contributor))
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Annotation):
             return all(
                 (
                     self.name == other.name,
-                    self.images == other.images,
+                    not len(set(self.images).symmetric_difference(set(other.images))),
                     self.contributor == other.contributor,
-                    self.categories == other.categories,
+                    not len(set(self.categories).symmetric_difference(set(other.categories))),
                     self.polygon == other.polygon,
                     self.polyline == other.polyline,
                     self.mask == other.mask,
@@ -328,11 +328,15 @@ class MultilayerImage:
         self._pydantic = None
 
     def __hash__(self):
-        return hash((*self.images, self.name))
+        return hash((*set(self.images), self.name))
 
     def __eq__(self, other):
         if isinstance(other, MultilayerImage):
-            return all((self.images == other.images, self.name == other.name))
+            return all(
+                (
+                    not len(set(self.images).symmetric_difference(set(other.images))),
+                    self.name == other.name
+                ))
         return NotImplemented
 
     def set_split(self, split: str):
@@ -652,7 +656,7 @@ class YarrowDataset:
         return new_yarrow_set
 
     def append(self, yarrow: "YarrowDataset") -> None:
-        """Appends another YarrowDataset to this dataset. The resulting dataset is this object
+        """Appends another YarrowDataset to this dataset. The resulting dataset is this object.
         The objects added will be the annotations, the multilayer_images and the images
 
         Args:

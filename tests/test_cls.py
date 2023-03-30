@@ -104,9 +104,13 @@ def test_yar_2_cls_2_yar(
 def test_yar_cls_add_image(
     yar_dataset: YarrowDataset, new_image: Image, new_clearance: Clearance
 ):
-    yar_dataset.add_image(new_image)
+    res_image = yar_dataset.add_image(new_image)
 
     assert new_image in yar_dataset.images
+    assert res_image in yar_dataset.images
+    actual_image = next((img for img in yar_dataset.images if img == res_image))
+    assert actual_image is res_image
+    assert actual_image is not new_image
     assert new_clearance in yar_dataset.confidential
 
     yar_pydantic = yar_dataset.pydantic()
@@ -306,8 +310,8 @@ def test_multilayer_images_append(
     add_multi_result = yar_dataset.add_multilayer_image(new_multilayer2)
 
     assert add_multi_result is not new_multilayer2
-    assert add_multi_result is new_multilayer
-    assert add_multi_result.images == new_multilayer2.images
+    assert add_multi_result == new_multilayer
+    assert set(add_multi_result.images) == set(new_multilayer2.images)
 
 
 def test_same_elem_insertion_remap(yar_dataset: YarrowDataset):
@@ -342,9 +346,9 @@ def test_same_elem_insertion_remap(yar_dataset: YarrowDataset):
 def test_set_split_should_set_all_images(yar_dataset: YarrowDataset):
     def verify_split(yar_dataset: YarrowDataset, value):
         for img in yar_dataset.images:
-            assert img.split is value
+            assert img.split == value
         for multi in yar_dataset.multilayer_images:
-            assert multi.split is value
+            assert multi.split == value
 
     verify_split(yar_dataset, None)
 
