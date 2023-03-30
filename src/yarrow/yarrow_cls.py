@@ -336,11 +336,25 @@ class MultilayerImage:
         return NotImplemented
 
     def set_split(self, split: str):
+        """Set the split for the current MultilayerImage and all its Images
+
+        Args:
+            split (str): The split value to assign
+        """
         self.split = split
         for img in self.images:
             img.split = split
 
     def pydantic(self, reset: bool = False):
+        """Returns the pydantic object mapping this class. After the first call_
+        the object reference is kept. Pass reset=True to reinstantiate the object
+
+        Args:
+            reset (bool, optional): Pass True to reinstantiate the object, previous object will be lost. Defaults to False.
+
+        Returns:
+            Image_pydantic: pydantic image class
+        """
         if self._pydantic is None or reset:
             self._pydantic = self._pydantic_call()
         return self._pydantic
@@ -494,11 +508,11 @@ class YarrowDataset:
         Return:
             (List[Images])
         """
-        result = []
+        result = set()
         for img in images:
-            result.append(self.add_image(img))
+            result.add(self.add_image(img))
 
-        return result
+        return list(result)
 
     def add_image(self, image: Image) -> Image:
         """Add an image and its confidential object if it exists
@@ -528,6 +542,16 @@ class YarrowDataset:
         return image
 
     def add_multilayer_image(self, multilayer: MultilayerImage) -> MultilayerImage:
+        """Add a multilayer image object, the returned multilayer object will be
+        the one in the current YarrowDataset and the original will remain unchanged
+
+        Args:
+            multilayer (MultilayerImage): input multilayer image object
+
+        Returns:
+            MultilayerImage: A copy of the original multilayer image object contained in the current YarrowDataset
+        """
+        multilayer = copy(multilayer)
         multilayer.images = self.add_images(multilayer.images)
 
         elem_in = next(
@@ -643,6 +667,11 @@ class YarrowDataset:
                 self.categories.append(cat)
 
     def extend(self, yarrows: List["YarrowDataset"]) -> None:
+        """Extends a YarrowDataset with a list of YarrowDatasets
+
+        Args:
+            yarrows (List[YarrowDataset]): List of YarrowDatasets, they will remain unchanged
+        """
         for yarrow in yarrows:
             self.append(yarrow)
 
