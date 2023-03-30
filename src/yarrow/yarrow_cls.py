@@ -328,7 +328,8 @@ class MultilayerImage:
         self._pydantic = None
 
     def __hash__(self):
-        return hash((*set(self.images), self.name))
+        # return hash((*set(self.images), self.name))
+        return hash((*sorted(self.images,key=lambda x: hash(x)),self.name))
 
     def __eq__(self, other):
         if isinstance(other, MultilayerImage):
