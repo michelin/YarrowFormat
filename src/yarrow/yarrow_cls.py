@@ -30,6 +30,7 @@ class Image:
         meta: dict = None,
         comment: str = None,
         asset_id: str = None,
+        split: str = None,
         **kwargs
     ) -> None:
         """Image object, not a pydantic class, represents the image informations
@@ -45,6 +46,7 @@ class Image:
             meta (dict, optional): optional metadata. Defaults to None.
             comment (str, optional): optional comment. Defaults to None.
             asset_id (str, optional): unique identifier of the asset that created the picture, not used. Defaults to None.
+            split(str, optional): string to specify to which split the image belong, used to assign images to "train", "validate" or "test" when training models for example.
         """
 
         self.id = id or uuid_init()
@@ -54,9 +56,10 @@ class Image:
         self.date_captured = date_captured
         self.azure_url = azure_url
         self.confidential = confidential
-        self.meta = meta
+        self.meta = meta or {}
         self.comment = comment
         self.asset_id = asset_id
+        self.split = split
 
         self._pydantic_self = None
 
@@ -117,6 +120,7 @@ class Annotation:
         num_keypoints: int = None,
         weight: float = None,
         date_captured: datetime = None,
+        meta: dict = None,
         **kwargs
     ) -> None:
         """Annotation class, can handle bbox, polygon, mask and keypoint annotation types \
@@ -154,6 +158,7 @@ class Annotation:
             num_keypoints (int, optional): number of labelled keypoints. Defaults to None.
             weight (float, optional): weight given to the quality of the annotation. Defaults to None.
             date_captured (datetime, optional): datetime at which the annotation was created. Defaults to None.
+            meta (dict, optional): a free metadata information key. If the Annotation cannot hold your information then put it here
         """
         self.name = name
 
@@ -195,6 +200,7 @@ class Annotation:
         self.num_keypoints = num_keypoints
         self.weight = weight
         self.date_captured = date_captured
+        self.meta = meta or {}
 
         self._pydantic_self = None
 
@@ -284,6 +290,7 @@ class MultilayerImage:
         name: str = None,
         meta: dict = None,
         id: str = None,
+        split: str = None,
     ) -> None:
         """MultilayerImage class. Represents a collection of `Image` that should be
         considered as one element.
@@ -309,11 +316,13 @@ class MultilayerImage:
             images (List[Image], optional): Defaults to [].
             name (str, optional): Name of the collection. Defaults to "".
             meta (dict, optional): Metadata. Defaults to {}.
+            split(str, optional): string to specify to which split the image belong, used to assign images to "train", "validate" or "test" when training models for example.
         """
         self.id = id or uuid_init()
         self.images = images or []
         self.name = name or ""
         self.meta = meta or {}
+        self.split = split
 
         self._pydantic = None
 
@@ -324,6 +333,11 @@ class MultilayerImage:
         if isinstance(other, MultilayerImage):
             return all((self.images == other.images, self.name == other.name))
         return NotImplemented
+
+    def set_split(self, split: str):
+        self.split = split
+        for img in self.images:
+            img.split = split
 
     def pydantic(self, reset: bool = False):
         if self._pydantic is None or reset:
@@ -336,6 +350,7 @@ class MultilayerImage:
             name=self.name,
             image_id=[img.pydantic().id for img in self.images],
             meta=self.meta,
+            split=self.split,
         )
 
 
@@ -421,10 +436,10 @@ class YarrowDataset:
         Return:
             (List[Annotation]). Returns the annotation that were added
         """
-        result = []
+        result = set()
         for annot in annots:
-            result.append(self.add_annotation(annot))
-        return result
+            result.add(self.add_annotation(annot))
+        return list(result)
 
     def add_annotation(self, annot: Annotation) -> Annotation:
         """DONT NEED TO ADD IMAGE AFTER THIS. Insertion is done in place
@@ -502,7 +517,7 @@ class YarrowDataset:
             return elem_in
         return image
 
-    def add_multilayer_image(self, multilayer: MultilayerImage):
+    def add_multilayer_image(self, multilayer: MultilayerImage) -> MultilayerImage:
         multilayer.images = self.add_images(multilayer.images)
 
         elem_in = next(
@@ -513,6 +528,14 @@ class YarrowDataset:
         else:
             return elem_in
         return multilayer
+
+    def add_multilayer_images(
+        self, multilayer_list: List[MultilayerImage]
+    ) -> List[MultilayerImage]:
+        result = set()
+        for multi in multilayer_list:
+            result.add(self.add_multilayer_image(multi))
+        return list(result)
 
     def pydantic(
         self, img_id: str = None, reset: bool = False
@@ -548,6 +571,42 @@ class YarrowDataset:
             if len(self.multilayer_images) > 0
             else None,
         )
+
+    def set_split(self, split: str) -> None:
+        """Assigns the value of `split` to all the images and multilayer images
+
+        Args:
+            split (str): Describes the split, used to set "train"/"validate"/"test" for example
+        """
+        for image in self.images:
+            image.split = split
+        for multilayer in self.multilayer_images:
+            multilayer.split = split
+
+    def get_split(self, split: str) -> "YarrowDataset":
+        """Returns a new dataset based on a `split` value. 
+        
+        The returned YarrowDataset will copy all the internal elements,\
+        meaning modifications on the new YarrowDataset won't impact the original YarrowDataset
+
+        Args:
+            split (str): The split to retrieve
+
+        Returns:
+            YarrowDataset: A copy of the current dataset containing only the elements linked to a given split value
+        """
+        new_yarrow_set = YarrowDataset(info=self.info)
+
+        for annot in self.annotations:
+            # Very strong assumption that all images of the annotation have the same value for split
+            if len(annot.images) > 0 and annot.images[0].split == split:
+                new_yarrow_set.add_annotation(annot)
+
+        for multi in self.multilayer_images:
+            if multi.split == split:
+                new_yarrow_set.add_multilayer_image(multi)
+
+        return new_yarrow_set
 
     @classmethod
     def from_yarrow(cls, yarrow: YarrowDataset_pydantic) -> "YarrowDataset":

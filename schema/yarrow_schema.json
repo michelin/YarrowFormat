@@ -185,6 +185,10 @@
                     "items": {
                         "$ref": "#/definitions/Layer"
                     }
+                },
+                "split": {
+                    "title": "Split",
+                    "type": "string"
                 }
             },
             "required": [
@@ -347,6 +351,10 @@
                     "title": "Date Captured",
                     "type": "string",
                     "format": "date-time"
+                },
+                "meta": {
+                    "title": "Meta",
+                    "type": "object"
                 }
             },
             "required": [
@@ -488,6 +496,10 @@
                 "meta": {
                     "title": "Meta",
                     "type": "object"
+                },
+                "split": {
+                    "title": "Split",
+                    "type": "string"
                 }
             }
         }
