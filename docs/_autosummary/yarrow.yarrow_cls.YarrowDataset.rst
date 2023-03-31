@@ -1,4 +1,4 @@
-yarrow.yarrow\_cls.YarrowDataset
+﻿yarrow.yarrow\_cls.YarrowDataset
 ================================
 
 .. currentmodule:: yarrow.yarrow_cls
@@ -22,6 +22,9 @@ yarrow.yarrow\_cls.YarrowDataset
       ~YarrowDataset.add_image
       ~YarrowDataset.add_images
       ~YarrowDataset.add_multilayer_image
+      ~YarrowDataset.add_multilayer_images
+      ~YarrowDataset.append
+      ~YarrowDataset.extend
       ~YarrowDataset.from_yarrow
       ~YarrowDataset.parse_file
       ~YarrowDataset.parse_obj
