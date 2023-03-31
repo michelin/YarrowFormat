@@ -215,11 +215,9 @@ class Annotation:
             return all(
                 (
                     self.name == other.name,
-                    not len(set(self.images).symmetric_difference(set(other.images))),
+                    set(self.images) == set(other.images),
                     self.contributor == other.contributor,
-                    not len(
-                        set(self.categories).symmetric_difference(set(other.categories))
-                    ),
+                    set(self.categories) == set(other.categories),
                     self.polygon == other.polygon,
                     self.polyline == other.polyline,
                     self.mask == other.mask,
@@ -339,7 +337,7 @@ class MultilayerImage:
         if isinstance(other, MultilayerImage):
             return all(
                 (
-                    not len(set(self.images).symmetric_difference(set(other.images))),
+                    set(self.images) == set(other.images),
                     self.name == other.name,
                 )
             )
@@ -424,30 +422,12 @@ class YarrowDataset:
         if isinstance(other, YarrowDataset):
             return all(
                 (
-                    not len(set(self.images).symmetric_difference(set(other.images))),
-                    not len(
-                        set(self.annotations).symmetric_difference(
-                            set(other.annotations)
-                        )
-                    ),
-                    not len(
-                        set(self.contributors).symmetric_difference(
-                            set(other.contributors)
-                        )
-                    ),
-                    not len(
-                        set(self.confidential).symmetric_difference(
-                            set(other.confidential)
-                        )
-                    ),
-                    not len(
-                        set(self.categories).symmetric_difference(set(other.categories))
-                    ),
-                    not len(
-                        set(self.multilayer_images).symmetric_difference(
-                            set(other.multilayer_images)
-                        )
-                    ),
+                    set(self.images) == set(other.images),
+                    set(self.annotations) == set(other.annotations),
+                    set(self.contributors) == set(other.contributors),
+                    set(self.confidential) == set(other.confidential),
+                    set(self.categories) == set(other.categories),
+                    set(self.multilayer_images) == set(other.multilayer_images),
                 )
             )
         return NotImplemented
