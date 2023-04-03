@@ -171,7 +171,15 @@ class Category(BaseModel):
         return NotImplemented
 
     def __hash__(self):
-        return hash((self.name, self.value, self.super_category, self.confidence, self.threshold))
+        return hash(
+            (
+                self.name,
+                self.value,
+                self.super_category,
+                self.confidence,
+                self.threshold,
+            )
+        )
 
 
 class RLE(BaseModel):
