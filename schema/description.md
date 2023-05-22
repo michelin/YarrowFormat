@@ -161,9 +161,9 @@ annotation_pydantic{
 
 **id** : accord id used in this file *only*
 
-**level** : values are {1,2,3,4} corresponds to D1, D2, D3 and D4
+**level** : values are {1,2,3,4} corresponds to arbitrary security levels
 
-**perimeter** : To be defined with data owner, for example "SY2" or "CAR" to indicate who owns the data
+**perimeter** : To be defined with the data owner, for example a team or a store to indicate who owns the data
 
 ## Contributors
 
