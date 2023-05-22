@@ -16,6 +16,7 @@ info{
     "source"            : Union[str, dict]
     "date_created"      : datetime
     "destination"       : Optional[dict]
+    "meta"              : Optional[dict]
 }
 
 image_pydantic{
@@ -26,10 +27,11 @@ image_pydantic{
     "date_captured"     : datetime
     "azure_url"         : Optional[str]
     "confidential_id"   : Optional[str]
-    "meta"              : Optional[json]
+    "meta"              : Optional[dict]
     "comment"           : Optional[str]
     "asset_id"          : Optional[str]
     "layers"            : Optional[List[layer]]
+    "split"             : Optional[str]
 }
 
 multilayer_image_pydantic{
@@ -42,7 +44,8 @@ layer{
     "frame_id"          : int
     "width"             : int
     "height"            : int
-    "meta"              : json
+    "name"              : Optional[str]
+    "meta"              : Optional[dict]
 }
 
 clearance{
@@ -92,6 +95,8 @@ annotation_pydantic{
 }
 ```
 
+> The type `dict` is equivalent to a valid json object. It is written `dict` to map it easier to python, any JSON object can be written, see the [definition](https://www.json.org/json-fr.html) for all the possibilities 
+
 ## Info
 
 **version** : format is ```vMajor.minor-DD.MM.YYYY```
@@ -122,23 +127,35 @@ annotation_pydantic{
 
 **asset_id** : Optional for now, the unique id of the asset which captured the image, in the futur should be used to link these data to other information systems
 
+**layers** : Optional, list of layers contained in the image file, to be used with `.tiff` when you want information at the slice level
+
+**split** : Optional string to indicate the image belongs to a "split" of data, mainly used to differenciate between "train", "validate" and "test" when training a model
+
 ## multilayer_image_pydantic
 
-**id** : multilayer id used in this ile *only*
+**id** : multilayer id used in this file *only*
 
 **image_id** : Reference to the image it applies
 
+**name** : Optional name to give to a multilayer image
+
 **meta** : key to store image metadata, the format is json and should be project specific.
+
+**split** : Optional string to indicate the image belongs to a "split" of data, mainly used to differenciate between "train", "validate" and "test" when training a model
 
 ## layer
 
+**id** : unique id for the layer
+
 **frame_id** : frame identifier inside the multi image file
+
+**name** : Optional name to give to a layer
 
 **width** : frame width in pixels
 
 **height** : frame height in pixels
 
-**meta** : key to store image metadata, the format is json and should be project specific.
+**meta** : key to store layer metadata, the format is json and should be project specific.
 
 ## Clearance
 
@@ -178,9 +195,9 @@ annotation_pydantic{
 
 **id** : annotation id used in this file *only*
 
-**image_id** : Reference to the image it applies
+**image_id** : Reference to the images it applies, should be a list even when applying to a single image
 
-**category_id** : Reference to the category
+**category_id** : Reference to the categories, should be a list
 
 **contributor_id** : Reference to the contributor
 
@@ -190,7 +207,9 @@ annotation_pydantic{
 
 **mask** : RLE see [link](https://youtu.be/h6s61a_pqfM?t=688)
 
-**polygon** : Polygon coordinates[^1] must be relative[^2] and follow `[[x, y],...]` order
+**polygon** : Polygon coordinates[^1] must be relative[^2] and follow `[[x, y],...]` order, the general convention is to automatically close the polygon hence the first point doesn't need to be repeated
+
+**polyline** : Polyline coordinates[^1] must be relative[^2] and follow `[[x, y],...]` order
 
 **area** : surface of the image occupied by the annotation, interval is 0..1
 
@@ -201,6 +220,10 @@ annotation_pydantic{
 **num_keypoints** : number of labeled keypoints (v>0)
 
 **weight** : Optional float value corresponding to the confidence of the annotation. Should be 1 for human based and in the range [0;1] for AI based
+
+**date_captured** : Optional datetime when the annotation was generated
+
+**meta** : Optional key to store annotation metadata, the format is json and should be project specific.
 
 [^1]: Coordinate system origin is located in the top left corner of the image.
 
