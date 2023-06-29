@@ -153,6 +153,8 @@ class Category(BaseModel):
     super_category  : Optional[str]
     keypoints       : Optional[List[str]]
     skeleton        : Optional[List[Edge]]
+    confidence      : Optional[float]
+    threshold       : Optional[float]
     # fmt: on
 
     def __eq__(self, other) -> bool:
@@ -162,12 +164,22 @@ class Category(BaseModel):
                     self.name == other.name,
                     self.value == other.value,
                     self.super_category == other.super_category,
+                    self.confidence == other.confidence,
+                    self.threshold == other.threshold,
                 )
             )
         return NotImplemented
 
     def __hash__(self):
-        return hash((self.name, self.value, self.super_category))
+        return hash(
+            (
+                self.name,
+                self.value,
+                self.super_category,
+                self.confidence,
+                self.threshold,
+            )
+        )
 
 
 class RLE(BaseModel):
@@ -253,6 +265,8 @@ class Annotation_pydantic(BaseModel):
     weight          : Optional[float]
     date_captured   : Optional[datetime]
     meta            : Optional[dict]
+    confidence      : Optional[float]
+    threshold       : Optional[float]
     # fmt: on
 
     def __eq__(self, other) -> bool:

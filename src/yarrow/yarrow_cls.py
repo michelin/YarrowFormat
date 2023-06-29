@@ -122,6 +122,8 @@ class Annotation:
         weight: float = None,
         date_captured: datetime = None,
         meta: dict = None,
+        confidence: float = None,
+        threshold: float = None,
         **kwargs
     ) -> None:
         """Annotation class, can handle bbox, polygon, mask and keypoint annotation types \
@@ -160,6 +162,8 @@ class Annotation:
             weight (float, optional): weight given to the quality of the annotation. Defaults to None.
             date_captured (datetime, optional): datetime at which the annotation was created. Defaults to None.
             meta (dict, optional): a free metadata information key. If the Annotation cannot hold your information then put it here
+            confidence (float, optional): Confidence level of the prediction. Defaults to None.
+            threshold (float, optional): Threshold to compare the confidence level. Defaults to None.
         """
         self.name = name
 
@@ -202,6 +206,8 @@ class Annotation:
         self.weight = weight
         self.date_captured = date_captured
         self.meta = meta or {}
+        self.confidence = confidence
+        self.threshold = threshold
 
         self._pydantic_self = None
 
