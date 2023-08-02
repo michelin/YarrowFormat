@@ -490,7 +490,9 @@ class YarrowDataset:
     def add_images(self, images: List[Image]) -> List[Image]:
         """Add an image list and its confidential objects if they exists
         and returns the actual images found in the yarrow in case they
-        are already present
+        are already present. SHould preserve image order in the list but
+        does not guarantee only unique images are present in the returned
+        image list
 
         Args:
             images (List[Image])
@@ -498,11 +500,11 @@ class YarrowDataset:
         Return:
             (List[Images])
         """
-        result = set()
+        result = list()
         for img in images:
-            result.add(self.add_image(img))
+            result.append(self.add_image(img))
 
-        return list(result)
+        return result
 
     def add_image(self, image: Image) -> Image:
         """Add an image and its confidential object if it exists

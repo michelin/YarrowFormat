@@ -311,8 +311,15 @@ def test_multilayer_images_append(
 
     assert add_multi_result is not new_multilayer2
     assert add_multi_result == new_multilayer
-    assert set(add_multi_result.images) == set(new_multilayer2.images)
+    assert add_multi_result.images == new_multilayer2.images
 
+
+def tests_multilayer_image_add_does_not_change_order(yar_dataset: YarrowDataset):
+    new_multilayer = MultilayerImage(images=yar_dataset.images[:5], name=uuid4().hex)
+
+    added_multi = yar_dataset.add_multilayer_image(new_multilayer)
+
+    assert new_multilayer.images == added_multi.images
 
 def test_same_elem_insertion_remap(yar_dataset: YarrowDataset):
     annot1 = yar_dataset.annotations[0]
