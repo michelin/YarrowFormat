@@ -321,6 +321,7 @@ def tests_multilayer_image_add_does_not_change_order(yar_dataset: YarrowDataset)
 
     assert new_multilayer.images == added_multi.images
 
+
 def test_same_elem_insertion_remap(yar_dataset: YarrowDataset):
     annot1 = yar_dataset.annotations[0]
 
