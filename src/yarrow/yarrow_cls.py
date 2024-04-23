@@ -784,9 +784,10 @@ class YarrowDataset:
 
     @classmethod
     def parse_file(cls, path, **kwargs) -> "YarrowDataset":
-        with open(path,'rb') as jsf:
+        with open(path, "rb") as jsf:
             yar_dict = json.load(jsf)
             return cls.parse_obj(yar_dict)
+
     @classmethod
     def parse_obj(cls, obj: dict, **kwargs) -> "YarrowDataset":
         return cls.from_yarrow(YarrowDataset_pydantic.model_validate(obj))

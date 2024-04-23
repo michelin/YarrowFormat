@@ -5,7 +5,7 @@ from typing import Any, List, Optional, Union
 from warnings import warn
 
 import numpy as np
-from pydantic import BaseModel,ConfigDict, Field, Json
+from pydantic import BaseModel, ConfigDict, Field, Json
 
 from ._yarrow_version import _yarrow_version
 

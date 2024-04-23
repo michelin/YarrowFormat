@@ -1,9 +1,10 @@
+import os
 from copy import deepcopy
 
 import pytest
 
 from yarrow import *
-import os
+
 
 @pytest.fixture
 def yar_dataset():
@@ -41,19 +42,21 @@ def test_append_empty(yar_dataset: YarrowDataset):
 
     assert yar_dataset == yar_empty
 
-def test_save_and_load_file(yar_dataset:YarrowDataset,tmp_path):
-    # We save the yarrow
-    yar_path = os.path.join(tmp_path,'test.yarrow.json')
-    yar_dataset.pydantic().save_to_file(yar_path)
-    
-    new_dataset = YarrowDataset.parse_file(yar_path)
-    compare_yarrow_datasets_pydantic(yar_dataset,new_dataset)
 
-def test_save_and_load_raw(yar_dataset:YarrowDataset,tmp_path):
+def test_save_and_load_file(yar_dataset: YarrowDataset, tmp_path):
     # We save the yarrow
-    yar_path = os.path.join(tmp_path,'test.yarrow.json')
+    yar_path = os.path.join(tmp_path, "test.yarrow.json")
     yar_dataset.pydantic().save_to_file(yar_path)
-    
-    with open(yar_path,'rb') as jsf:
+
+    new_dataset = YarrowDataset.parse_file(yar_path)
+    compare_yarrow_datasets_pydantic(yar_dataset, new_dataset)
+
+
+def test_save_and_load_raw(yar_dataset: YarrowDataset, tmp_path):
+    # We save the yarrow
+    yar_path = os.path.join(tmp_path, "test.yarrow.json")
+    yar_dataset.pydantic().save_to_file(yar_path)
+
+    with open(yar_path, "rb") as jsf:
         new_dataset = YarrowDataset.parse_raw(jsf)
-    compare_yarrow_datasets_pydantic(yar_dataset,new_dataset)
+    compare_yarrow_datasets_pydantic(yar_dataset, new_dataset)
