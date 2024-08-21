@@ -81,6 +81,7 @@ class Image:
         if isinstance(other, Image):
             return all(
                 (
+                    self.azure_url == other.azure_url,
                     self.file_name == other.file_name,
                     self.width == other.width,
                     self.height == other.height,
