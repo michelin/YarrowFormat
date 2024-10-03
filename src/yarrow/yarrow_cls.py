@@ -212,8 +212,6 @@ class Annotation:
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Annotation):
-            if np.asarray(self.polygon).shape != np.asarray(other.polygon).shape:
-                return False
 
             return all(
                 (
@@ -221,7 +219,8 @@ class Annotation:
                     set(self.images) == set(other.images),
                     self.contributor == other.contributor,
                     set(self.categories) == set(other.categories),
-                    self.polygon == other.polygon,
+                    np.asarray(self.polygon).shape == np.asarray(other.polygon).shape
+                    and self.polygon == other.polygon,
                     self.polyline == other.polyline,
                     self.mask == other.mask,
                     self.bbox == other.bbox,
