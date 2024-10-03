@@ -332,7 +332,7 @@ class YarrowDataset_pydantic(BaseModel):
         """
         with open(fp, "w") as fp:
             json.dump(
-                self.dict(
+                self.model_dump(
                     exclude_unset=exclude_unset, exclude_none=exclude_none, **kwargs
                 ),
                 fp,

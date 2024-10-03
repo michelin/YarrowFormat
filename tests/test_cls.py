@@ -33,7 +33,7 @@ def new_contributor():
 @pytest.fixture
 def new_image(new_clearance: Clearance):
     new_image_pydantic = rand_image(conf_id=new_clearance.id)
-    return Image(confidential=new_clearance, **new_image_pydantic.dict())
+    return Image(confidential=new_clearance, **new_image_pydantic.model_dump())
 
 
 @pytest.fixture
@@ -45,7 +45,7 @@ def new_annotation(
         images=[new_image],
         categories=[new_category],
         contributor=new_contributor,
-        **new_annotation_pydantic.dict()
+        **new_annotation_pydantic.model_dump()
     )
 
 
@@ -216,7 +216,7 @@ def test_parse_with_null_values(yar_dataset_pydantic: YarrowDataset_pydantic):
     """
 
     # First test is with keys completely removed
-    primary_dict = yar_dataset_pydantic.dict()
+    primary_dict = yar_dataset_pydantic.model_dump()
     primary_dict.pop("annotations")
     primary_dict.pop("contributors")
     primary_dict.pop("categories")
@@ -228,7 +228,7 @@ def test_parse_with_null_values(yar_dataset_pydantic: YarrowDataset_pydantic):
     assert isinstance(yar_dataset, YarrowDataset)
 
     # Second test if values set to None
-    second_dict = yar_dataset_pydantic.dict()
+    second_dict = yar_dataset_pydantic.model_dump()
     second_dict["annotations"] = None
     second_dict["contributors"] = None
     second_dict["categories"] = None
