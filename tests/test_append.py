@@ -48,8 +48,6 @@ def test_save_and_load_file(yar_dataset: YarrowDataset, tmp_path):
     # We save the yarrow
     yar_path = os.path.join(tmp_path, "test.yarrow.json")
     yar_dataset.pydantic().save_to_file(yar_path, exclude_none=True)
-    yar_dataset.pydantic().save_to_file("test_pydantic.yarrow.json", exclude_none=True)
-    yar_dataset.save("test_normal.yarrow.json")
 
     new_dataset = YarrowDataset.parse_file(yar_path)
     compare_yarrow_datasets_pydantic(yar_dataset, new_dataset)

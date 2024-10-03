@@ -6,10 +6,9 @@ Each class has a pydantic conversion:
 
 >>> img = Image(...)
     img_pydantic = img.pydantic() # you have a Image_pydantic instance
-    img_as_dict = img_pydantic.dict() # now you have a dict
+    img_as_dict = img_pydantic.model_dump() # now you have a dict
 
 """
-import os
 from copy import copy
 from datetime import datetime
 from warnings import warn
@@ -674,16 +673,30 @@ class YarrowDataset:
         for yarrow in yarrows:
             self.append(yarrow)
 
-    def save(self, yar_path: str, indent=None):
+    def save(
+        self,
+        yar_path: str,
+        exclude_unset: bool = False,
+        exclude_none: bool = True,
+        indent: int = 4,
+        default=str,
+    ):
         """Save the current YarrowDataset to a file
 
         Args:
             yar_path (str): Path to save the file
-            exist_ok (boolean, optional): If True, will overwrite the file if it already exists. Defaults to False.
+            exclude_unset: (bool) Exclude unset keys you should not write what you don't use, defaults to False
+            exclude_none: (bool) Exclude none keys you should not write what you don't use, defaults to True
+            indent: (int) Number of indents in the json file, defaults to 4
+            default: default(obj) is a function that should return a serializable version of obj or raise TypeError. The default simply raises TypeError, defaults to str
         """
-        os.makedirs(os.path.dirname(yar_path), exist_ok=True)
-        with open(yar_path, "w") as jsf:
-            json.dump(self.pydantic().model_dump(), jsf, indent=indent, default=str)
+        self.pydantic().save_to_file(
+            yar_path,
+            exclude_unset=exclude_unset,
+            exclude_none=exclude_none,
+            indent=indent,
+            default=default,
+        )
 
     @classmethod
     def from_yarrow(cls, yarrow: YarrowDataset_pydantic) -> "YarrowDataset":
@@ -718,7 +731,7 @@ class YarrowDataset:
         # img_list = []
         img_id_dict = {}
         for img in yarrow.images:
-            img_param = img.dict()
+            img_param = img.model_dump()
 
             # Get confidential from its id
             conf = next(
