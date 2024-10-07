@@ -673,31 +673,6 @@ class YarrowDataset:
         for yarrow in yarrows:
             self.append(yarrow)
 
-    def save(
-        self,
-        yar_path: str,
-        exclude_unset: bool = False,
-        exclude_none: bool = True,
-        indent: int = 4,
-        default=str,
-    ):
-        """Save the current YarrowDataset to a file
-
-        Args:
-            yar_path (str): Path to save the file
-            exclude_unset: (bool) Exclude unset keys you should not write what you don't use, defaults to False
-            exclude_none: (bool) Exclude none keys you should not write what you don't use, defaults to True
-            indent: (int) Number of indents in the json file, defaults to 4
-            default: default(obj) is a function that should return a serializable version of obj or raise TypeError. The default simply raises TypeError, defaults to str
-        """
-        self.pydantic().save_to_file(
-            yar_path,
-            exclude_unset=exclude_unset,
-            exclude_none=exclude_none,
-            indent=indent,
-            default=default,
-        )
-
     @classmethod
     def from_yarrow(cls, yarrow: YarrowDataset_pydantic) -> "YarrowDataset":
         """Constructor to transform a `YarrowDataset_pydantic` and replace all id links \
