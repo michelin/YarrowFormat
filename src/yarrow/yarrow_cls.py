@@ -6,7 +6,7 @@ Each class has a pydantic conversion:
 
 >>> img = Image(...)
     img_pydantic = img.pydantic() # you have a Image_pydantic instance
-    img_as_dict = img_pydantic.dict() # now you have a dict
+    img_as_dict = img_pydantic.model_dump() # now you have a dict
 
 """
 from copy import copy
@@ -211,13 +211,15 @@ class Annotation:
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Annotation):
+
             return all(
                 (
                     self.name == other.name,
                     set(self.images) == set(other.images),
                     self.contributor == other.contributor,
                     set(self.categories) == set(other.categories),
-                    self.polygon == other.polygon,
+                    np.asarray(self.polygon).shape == np.asarray(other.polygon).shape
+                    and self.polygon == other.polygon,
                     self.polyline == other.polyline,
                     self.mask == other.mask,
                     self.bbox == other.bbox,
@@ -704,7 +706,7 @@ class YarrowDataset:
         # img_list = []
         img_id_dict = {}
         for img in yarrow.images:
-            img_param = img.dict()
+            img_param = img.model_dump()
 
             # Get confidential from its id
             conf = next(

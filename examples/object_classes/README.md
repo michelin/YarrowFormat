@@ -48,7 +48,7 @@ img_pydantic = Image.pydantic()
 
 # Now img_pydantic is a valid pydantic object will can be used to serialize the object
 
-img_dict = img_pydantic.dict()
+img_dict = img_pydantic.model_dump()
 ```
 
 ## Annotation class

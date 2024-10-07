@@ -91,19 +91,19 @@ def test_Meta_Json_behaviour():
 
     meta_ex = MetaExample()
 
-    image_base = rand_image().dict(exclude_unset=True)
+    image_base = rand_image().model_dump(exclude_unset=True)
     image_base["meta"] = meta_ex.json()
     image_meta = Image_pydantic(**image_base)
-    assert image_meta.meta == meta_ex.dict()
+    assert image_meta.meta == meta_ex.model_dump()
 
-    image_base2 = rand_image().dict(exclude_unset=True)
-    image_base2["meta"] = meta_ex.dict()
+    image_base2 = rand_image().model_dump(exclude_unset=True)
+    image_base2["meta"] = meta_ex.model_dump()
     image_meta2 = Image_pydantic(**image_base2)
-    assert image_meta2.meta == meta_ex.dict()
+    assert image_meta2.meta == meta_ex.model_dump()
 
-    image_base3 = rand_image().dict(exclude_unset=True)
+    image_base3 = rand_image().model_dump(exclude_unset=True)
     image_base3["meta"] = str(
-        meta_ex.dict()
+        meta_ex.model_dump()
     )  # putting the dict output in a str should not be sufficient
 
     with pytest.raises(ValidationError):
@@ -117,8 +117,8 @@ def test_annot_list_init():
     annot.image_id = [uuid4().hex for _ in range(5)]
 
     assert isinstance(
-        Annotation_pydantic(**annot.dict(exclude_unset=True)), Annotation_pydantic
+        Annotation_pydantic(**annot.model_dump(exclude_unset=True)), Annotation_pydantic
     )
-    new_annot = Annotation_pydantic(**annot.dict(exclude_unset=True))
+    new_annot = Annotation_pydantic(**annot.model_dump(exclude_unset=True))
     assert new_annot.category_id == annot.category_id
     assert new_annot.image_id == annot.image_id

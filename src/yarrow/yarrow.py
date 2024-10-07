@@ -323,8 +323,10 @@ class YarrowDataset_pydantic(BaseModel):
 
         :param fp: File path to save the dataset to
         :type fp: _type_
-        :param exclude_unset: Exclude unset keys you should not write what you don't use, defaults to True
-        :type exclude_unset: bool, optional
+        :param exclude_unset: Exclude unset keys you should not write what you don't use, defaults to False
+        :type exclude_unset: bool, optional False
+        :param exclude_none: (bool) Exclude none keys you should not write what you don't use, defaults to True
+        :type exclude_none: bool, optional True
         :param indent: Number of indents in the json file, defaults to 4
         :type indent: int, optional
         :param default: default(obj) is a function that should return a serializable version of obj or raise TypeError. The default simply raises TypeError, defaults to str
@@ -332,7 +334,7 @@ class YarrowDataset_pydantic(BaseModel):
         """
         with open(fp, "w") as fp:
             json.dump(
-                self.dict(
+                self.model_dump(
                     exclude_unset=exclude_unset, exclude_none=exclude_none, **kwargs
                 ),
                 fp,
